@@ -1,6 +1,6 @@
 #!/bin/bash
 shopt -u extglob; set +H
-[ -z "$1" ] && echo "Usage: $(basename $0) startrow (always 8 rows)" && exit 1
+[ -z "$1" ] && echo "Usage: $(basename $0) startrow (always 8 rows) [month=default current month] " && exit 1
 cd /Users/michaelmellouk/rav/nachweis
 START=$1
 ENDE=$(($START+7))
@@ -21,7 +21,7 @@ NACHWEISFILE=${MONAT}.${JAHR}/${MONAT}.${JAHR}.html
 left=47
 top=215
 TAG=1
-TAGEND=6
+TAGEND=5
 i=1
 for row in $(cat ${InFile}.underscored| gawk -v start=$START -v ende=$ENDE  'BEGIN { FS=","; OFS="," } NR>=start && NR<=ende  { print $1";"$3";"$4";"$6 }'); do
     echo row=$row
