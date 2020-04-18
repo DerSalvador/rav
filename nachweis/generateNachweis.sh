@@ -1,9 +1,10 @@
 #!/bin/bash
 shopt -u extglob; set +H
-[ -z "$1" ] && echo "Usage: $(basename $0) startrow (always 8 rows) [month=default current month] " && exit 1
+[ -z "$1" ] && echo "Usage: $(basename $0) startrow [month=default current month] [count-offers=default 8]" && exit 1
 cd /Users/michaelmellouk/rav/nachweis
 START=$1
-ENDE=$(($START+7))
+COUNT=${3:-7}
+ENDE=$(($START+$COUNT))
 InFile=linkedIn.jobs-with-contact-col.csv
 cat linkedIn.jobs-with-contact-col.csv| tr ' ' '_'| tr -d '"'| tr -d '/'| tr -d '%'  > ${InFile}.underscored
 InFile=linkedIn.jobs-with-contact-col.csv
@@ -17,7 +18,7 @@ JAHR="$(date +%Y)"
 TMPF=$(mktemp)
 mkdir -p ${MONAT}.${JAHR}
 cp *.png *.jpg ${MONAT}.${JAHR}/
-NACHWEISFILE=${MONAT}.${JAHR}/${MONAT}.${JAHR}.html
+NACHWEISFILE=${MONAT}.${JAHR}/${MONAT}.${JAHR}.$START.$COUNT.html
 left=47
 top=215
 TAG=1
