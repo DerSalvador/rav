@@ -19,7 +19,7 @@ mkdir -p ${MONAT}.${JAHR}
 cp *.png *.jpg ${MONAT}.${JAHR}/
 NACHWEISFILE=${MONAT}.${JAHR}/${MONAT}.${JAHR}.html
 left=47
-top=220
+top=215
 TAG=1
 TAGEND=6
 i=1
@@ -27,13 +27,18 @@ for row in $(cat ${InFile}.underscored| gawk -v start=$START -v ende=$ENDE  'BEG
     echo row=$row
     TAG="$(printf '%02d' $(shuf -i $TAG-$TAGEND -n 1))"
     URL=$(echo $row|cut -d";" -f1|tr '_' ' ')
+    echo url=$URL
     FIRMA=$(echo $row|cut -d";" -f2|tr '_' ' ')
     CONTACT=$(echo $row|cut -d";" -f3|tr '_' ' ')
     STELLE=$(echo $row|cut -d";" -f4|tr '_' ' ')
-    cat row.tpl.html| sed -e "s/{{top}}/${top}/g"| sed -e "s/{{monat}}/${MONAT}/g"| sed -e "s/{{jahr}}/${JAHR}/g"| sed -e "s/{{tag}}/${TAG}/g" | sed -e "s/{{firma}}/${FIRMA}/g" | sed -e "s/{{contact}}/${URL}/g"  | sed -e "s/{{stelle}}/\"${STELLE}\"/g" | sed -e "s/{{rav}}/\"\"/g" | sed -e "s/{{absagegrund}}/\"\"/g"   >>$TMPF
+    echo CONTACT=$CONTACT
+    topurl=$(($top + 10))
+    topcontact=$(($topurl + 10))
+    cat row.tpl.html| sed -e "s/{{contact}}/${CONTACT}/g"| sed -e "s/{{topcontact}}/${topcontact}/g"| sed -e "s/{{topurl}}/${topurl}/g"| sed -e "s/{{url}}/${URL}/g"| sed -e "s/{{top}}/${top}/g"| sed -e "s/{{monat}}/${MONAT}/g"| sed -e "s/{{jahr}}/${JAHR}/g"| sed -e "s/{{tag}}/${TAG}/g" | sed -e "s/{{firma}}/${FIRMA}/g" | sed -e "s/{{stelle}}/${STELLE}/g" | sed -e "s/{{rav}}//g" | sed -e "s/{{absagegrund}}//g"   >>$TMPF
     top=$(($top + 35))
     i=$((i+1))
     TAGEND=$((i*4))
+    top=$(($top-1))
     echo -e "\r\n" >>$TMPF
 done
 TABLE="$(cat ${TMPF}|tr -d '\n')"
