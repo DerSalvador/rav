@@ -1,13 +1,14 @@
 #!/bin/bash
 shopt -u extglob; set +H
-[ -z "$1" ] && echo "Usage: $(basename $0) startrow [month=default current month] [count-offers=default 8]" && exit 1
+[ -z "$1" ] && echo "Usage: $(basename $0) startrow [month=default current month] [count-offers=default 8]" && find . -name "[0-9][0-9].*" && exit 1
 cd /Users/michaelmellouk/rav/nachweis
 START=$1
 COUNT=${3:-7}
 ENDE=$(($START+$COUNT))
 InFile=linkedIn.jobs-with-contact-col.csv
-cat linkedIn.jobs-with-contact-col.csv| tr ' ' '_'| tr -d '"'| tr -d '/'| tr -d '%'  > ${InFile}.underscored
-InFile=linkedIn.jobs-with-contact-col.csv
+# cat linkedIn.jobs-with-contact-col.csv| tr ' ' '_'| tr -d '"'| tr -d '/'| tr -d '%'  > ${InFile}.underscored.csv
+cat linkedIn.jobs-with-contact-col.csv | tr ' ' '_' | tr -d '"' | sed 's/\//{{slash}}/g' | tr -d '%'  > ${InFile}.underscored.csv
+ 
 #while IFS=, read -ra fields ; do
 #    echo "${fields[2]}"
 #done <"$InFile"
@@ -24,7 +25,7 @@ top=215
 TAG=1
 TAGEND=5
 i=1
-for row in $(cat ${InFile}.underscored| gawk -v start=$START -v ende=$ENDE  'BEGIN { FS=","; OFS="," } NR>=start && NR<=ende  { print $1";"$3";"$4";"$6 }'); do
+for row in $(cat ${InFile}.underscored.csv| gawk -v start=$START -v ende=$ENDE  'BEGIN { FS=","; OFS="," } NR>=start && NR<=ende  { print $1";"$3";"$4";"$6 }'); do
     echo row=$row
     TAG="$(printf '%02d' $(shuf -i $TAG-$TAGEND -n 1))"
     URL=$(echo $row|cut -d";" -f1|tr '_' ' ')
@@ -50,4 +51,5 @@ cat ./nachweisFullTemplate.tpl.html|sed -e "s/{{rows}}/${TABLE}/g" > $NACHWEISFI
 sed  -i -e "s/{{timestamp}}/"$(date +%d.%m.%Y)"/g"  $NACHWEISFILE.$TS.html
 sed  -i -e "s/{{monat}}/${MONAT}/g"  $NACHWEISFILE.$TS.html
 sed  -i -e "s/{{jahr}}/${JAHR}/g"  $NACHWEISFILE.$TS.html
+sed  -i -e "s/{{slash}}/\//g"  $NACHWEISFILE.$TS.html
 

@@ -1,0 +1,11 @@
+Forwarding from 0.0.0.0:9229 -> 9229
+Forwarding from 127.0.0.1:9229 -> 9229
+Forwarding from [::1]:9229 -> 9229
+Handling connection for 9229
+Handling connection for 9229
+Handling connection for 9229
+Handling connection for 9229
+Handling connection for 9229
+Handling connection for 9229
+Handling connection for 9229
+E0419 15:03:36.179965    2753 portforward.go:233] lost connection to pod
