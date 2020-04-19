@@ -30,9 +30,9 @@ for row in $(cat ${InFile}.underscored.csv| gawk -v start=$START -v ende=$ENDE  
     TAG="$(printf '%02d' $(shuf -i $TAG-$TAGEND -n 1))"
     URL=$(echo $row|cut -d";" -f1|tr '_' ' ')
     echo url=$URL
-    FIRMA=$(echo $row|cut -d";" -f2|tr '_' ' ')
-    CONTACT=$(echo $row|cut -d";" -f3|tr '_' ' ')
-    STELLE=$(echo $row|cut -d";" -f4|tr '_' ' ')
+    FIRMA=$(echo $row|cut -d";" -f2|tr '_' ' '|tr '&' 'u')
+    CONTACT=$(echo $row|cut -d";" -f3|tr '_' ' '|tr '&' 'u')
+    STELLE=$(echo $row|cut -d";" -f4|tr '_' ' '|tr '&' 'u')
     echo CONTACT=$CONTACT
     topurl=$(($top + 10))
     topcontact=$(($topurl + 10))
